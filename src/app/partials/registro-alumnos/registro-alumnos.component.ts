@@ -118,6 +118,11 @@ export class RegistroAlumnosComponent implements OnInit {
     }
 
     // Lógica para registrar un nuevo alumno
+
+     this.alumno.fecha_nacimiento = this.limpiarFecha(this.alumno.fecha_nacimiento);
+      console.log("FECHA ENVIADA:", this.alumno.fecha_nacimiento);
+
+
     if(this.alumno.password == this.alumno.confirmar_password){ //si las contraseñas coinciden
       this.alumnosService.registrarAlumnos(this.alumno).subscribe( //
         (response) => {
@@ -143,4 +148,20 @@ export class RegistroAlumnosComponent implements OnInit {
     }
   }
 
+private limpiarFecha(fecha: any): string {
+  if (!fecha) return "";
+
+  // Si viene como objeto Date
+  if (fecha instanceof Date) {
+    return fecha.toISOString().split("T")[0];
+  }
+
+  // Si viene como string con T00:00:00Z
+  if (typeof fecha === "string" && fecha.includes("T")) {
+    return fecha.split("T")[0];
+  }
+
+  // Si ya viene formateada correctamente (YYYY-MM-DD)
+  return fecha;
+}
 }

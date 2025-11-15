@@ -78,11 +78,8 @@
 
       <mat-form-field class="mat-input" appearance="outline">
         <mat-label>Fecha de Nacimiento</mat-label>
-        <input matInput
-               [(ngModel)]="alumno.fecha_nacimiento"
-               [matDatepicker]="picker"
-               placeholder="DD/MM/AAAA"
-               (dateChange)="calcularEdad($event)">
+        <input matInput [(ngModel)]="alumno.fecha_nacimiento" [matDatepicker]="picker"
+          placeholder="DD/MM/AAAA" (dateChange)="calcularEdad($event)">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
