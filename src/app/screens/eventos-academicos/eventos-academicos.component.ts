@@ -353,6 +353,15 @@ export class EventosAcademicosComponent implements OnInit {
       return;
     }
 
+    // Verificar que el responsable seleccionado exista en la lista de responsables
+    const responsableIdNum = parseInt(this.evento.responsable_id as any, 10);
+    if (this.evento.responsable_id && !this.responsables.find(r => r.id === responsableIdNum)) {
+      this.errors['responsable_id'] = 'El responsable seleccionado no es válido';
+      console.error('Responsable inválido antes de enviar:', this.evento.responsable_id);
+      this.cargando = false;
+      return;
+    }
+
     this.cargando = true;
 
     // Preparar datos para enviar

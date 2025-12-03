@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class EventosService {
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = environment.url_api; // Use URL from environment (dev/prod)
 
   constructor(
     private http: HttpClient,
@@ -158,8 +158,8 @@ export class EventosService {
     }
 
     // Obtener maestros y administradores de sus respectivos endpoints
-    const maestros$ = this.http.get<any>(`${environment.url_api}/lista-maestros/`, { headers });
-    const admins$ = this.http.get<any>(`${environment.url_api}/lista-admins/`, { headers });
+    const maestros$ = this.http.get<any>(`${this.apiUrl}/lista-maestros/`, { headers });
+    const admins$ = this.http.get<any>(`${this.apiUrl}/lista-admins/`, { headers });
 
     // Retornar un observable que combine ambas peticiones
     return new Observable((observer) => {
@@ -222,8 +222,10 @@ export class EventosService {
           }
         }
 
+        // Use the underlying user id when available (backend expects User id)
+        const idUsuario = (m.user && m.user.id) ? m.user.id : m.id;
         return {
-          id: m.id,
+          id: idUsuario,
           nombre: nombre
         };
       });
@@ -244,8 +246,10 @@ export class EventosService {
           }
         }
 
+        // Use the underlying user id when available
+        const idUsuario = (a.user && a.user.id) ? a.user.id : a.id;
         return {
-          id: a.id,
+          id: idUsuario,
           nombre: nombre
         };
       });
@@ -271,7 +275,7 @@ export class EventosService {
     } else {
       headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     }
-    return this.http.get<any>(`${environment.url_api}/lista-eventos/`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/lista-eventos/`, { headers });
   }
 
   /**
@@ -285,7 +289,8 @@ export class EventosService {
     } else {
       headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     }
-    return this.http.get<any>(`${environment.url_api}/eventos/${idEvento}/`, { headers });
+    // Backend exposes 'eventos/' and accepts an 'id' query param to get a single event
+    return this.http.get<any>(`${this.apiUrl}/eventos/?id=${idEvento}`, { headers });
   }
 
   /**
@@ -320,12 +325,12 @@ export class EventosService {
       datosFormato.responsable_id = parseInt(datosFormato.responsable_id, 10);
     }
 
-    console.log('URL:', `${environment.url_api}/eventos/`);
+    console.log('URL:', `${this.apiUrl}/eventos/`);
     console.log('Datos enviados:', datosFormato);
     console.log('responsable_id enviado:', datosFormato.responsable_id, 'Tipo:', typeof datosFormato.responsable_id);
     console.log('Headers:', headers);
 
-    return this.http.post<any>(`${environment.url_api}/eventos/`, datosFormato, { headers });
+    return this.http.post<any>(`${this.apiUrl}/eventos/`, datosFormato, { headers });
   }
 
   /**
@@ -387,14 +392,18 @@ export class EventosService {
       datosFormato.responsable_id = parseInt(datosFormato.responsable_id, 10);
     }
 
-    // Incluir el ID en los datos
+    // Incluir el ID en los datos (backend espera id en el body in some implementations)
     const datosActualizar = { ...datosFormato, id: idEvento };
 
-    console.log('URL:', `${environment.url_api}/eventos/`);
+    // Some backends expect the id as query param while the URL path is the collection.
+    // Try PUT to /eventos/?id=<id> which matches the Django URLconf for 'eventos/'.
+    const urlWithQuery = `${this.apiUrl}/eventos/?id=${idEvento}`;
+
+    console.log('URL (PUT):', urlWithQuery);
     console.log('Datos enviados:', datosActualizar);
     console.log('Headers:', headers);
 
-    return this.http.put<any>(`${environment.url_api}/eventos/`, datosActualizar, { headers });
+    return this.http.put<any>(urlWithQuery, datosActualizar, { headers });
   }
 
   /**
@@ -408,7 +417,7 @@ export class EventosService {
     } else {
       headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     }
-    return this.http.delete<any>(`${environment.url_api}/eventos/?id=${idEvento}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/eventos/?id=${idEvento}`, { headers });
   }
 
   public getTotalEventos(): Observable<any>{
@@ -420,6 +429,6 @@ export class EventosService {
       headers = new HttpHeaders({ 'Content-Type': 'application/json' });
       console.log("No se encontró el token del usuario");
     }
-    return this.http.get<any>(`${environment.url_api}/total-eventos/`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/total-eventos/`, { headers });
   }
 }
