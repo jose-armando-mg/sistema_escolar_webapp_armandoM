@@ -51,6 +51,15 @@ export class RegistroMaestrosComponent implements OnInit {
         //Asignamos a nuestra variable global el valor del ID que viene por la URL
         this.idUser = this.activatedRoute.snapshot.params['id'];
         console.log("ID User: ", this.idUser);
+        // Bloquear edición si no es el mismo usuario
+        const sessionUserId = Number(this.facadeService.getUserId());
+        const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+        const isAdmin = group === 'admin' || group === 'administrador';
+        if (!isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+          alert('No tienes permisos para editar datos de otro usuario.');
+          this.router.navigate(['maestros']);
+          return;
+        }
         //Al iniciar la vista asignamos los datos del user
         this.maestro = this.datos_user || {};
         // Asegurar que exista el array materias_json al editar
@@ -118,6 +127,14 @@ export class RegistroMaestrosComponent implements OnInit {
     public actualizar(){
     // Validación de los datos
     this.errors = {};
+      // Validar que solo pueda actualizar su propio registro
+      const sessionUserId = Number(this.facadeService.getUserId());
+      const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+      const isAdmin = group === 'admin' || group === 'administrador';
+      if (!isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+        alert('Acción no permitida: solo puedes actualizar tus propios datos.');
+        return false;
+      }
     this.errors = this.maestrosService.validarMaestro(this.maestro, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
@@ -216,6 +233,14 @@ export class RegistroMaestrosComponent implements OnInit {
   public registrar(){
     //Validamos si el formulario está lleno y correcto
     this.errors = {};
+    // Para registro, si hay sesión, solo permitir si coincide el id cuando aplica
+    const sessionUserId = Number(this.facadeService.getUserId());
+    const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+    const isAdmin = group === 'admin' || group === 'administrador';
+    if (this.editar && !isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+      alert('Acción no permitida: solo puedes registrar/editar tus propios datos.');
+      return false;
+    }
     this.errors = this.maestrosService.validarMaestro(this.maestro, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
@@ -270,6 +295,18 @@ public soloLetras(event: KeyboardEvent) {
     event.preventDefault();
   }
 }
+
+  // Función para permitir solo caracteres alfanuméricos (letras y números)
+  public soloAlfaNumericos(event: KeyboardEvent) {
+    if (event.key.length > 1) {
+      return; // Permitir teclas especiales
+    }
+
+    const regex = /^[A-Za-z0-9]$/;
+    if (!regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
 
 private limpiarFecha(fecha: any): string {
   if (!fecha) return "";

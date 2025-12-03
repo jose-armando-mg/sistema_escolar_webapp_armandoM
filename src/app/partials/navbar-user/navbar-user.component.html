@@ -22,10 +22,21 @@
         <span class="material-icons">bar_chart</span>
         <span>Gráficas</span>
       </li>
-      <li *ngIf="canSeeTeacherItems()" routerLink="/eventos-academicos" routerLinkActive="active" class="scoop-navbar-item">
+      <li *ngIf="canSeeEventos()" class="scoop-navbar-item has-sub" [ngClass]="{'active': expandedMenu==='eventos'}" (click)="toggleMenu('eventos')">
         <span class="material-icons">event</span>
         <span>Eventos Académicos</span>
+        <span class="material-icons submenu-arrow">{{ expandedMenu==='eventos' ? 'expand_less' : 'expand_more' }}</span>
       </li>
+      <ul *ngIf="expandedMenu==='eventos'" class="scoop-submenu">
+        <li routerLink="/eventos-academicos" routerLinkActive="active" (click)="closeMenu()">
+          <span class="material-icons submenu-icon">list</span>
+          <span>Ver eventos</span>
+        </li>
+        <li *ngIf="canRegisterEventos()" routerLink="/eventos-academicos/registrar" routerLinkActive="active" (click)="closeMenu()">
+          <span class="material-icons submenu-icon">event_note</span>
+          <span>Registrar eventos académicos</span>
+        </li>
+      </ul>
     </ul>
     <button class="scoop-logout-btn" (click)="logout()">
       <span class="material-icons">logout</span>
@@ -71,10 +82,21 @@
           <span class="material-icons">bar_chart</span>
           <span>Gráficas</span>
         </li>
-        <li *ngIf="canSeeTeacherItems()" routerLink="/eventos-academicos" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+        <li *ngIf="canSeeEventos()" class="scoop-navbar-item has-sub" [ngClass]="{'active': expandedMenu==='eventos'}" (click)="toggleMenu('eventos')">
           <span class="material-icons">event</span>
           <span>Eventos Académicos</span>
+          <span class="material-icons submenu-arrow">{{ expandedMenu==='eventos' ? 'expand_less' : 'expand_more' }}</span>
         </li>
+        <ul *ngIf="expandedMenu==='eventos'" class="scoop-submenu mobile">
+          <li routerLink="/eventos-academicos" routerLinkActive="active" (click)="closeMenu(); closeSidebar()">
+            <span class="material-icons submenu-icon">list</span>
+            <span>Ver eventos</span>
+          </li>
+          <li *ngIf="canRegisterEventos()" routerLink="/eventos-academicos/registrar" routerLinkActive="active" (click)="closeMenu(); closeSidebar()">
+            <span class="material-icons submenu-icon">event_note</span>
+            <span>Registrar eventos académicos</span>
+          </li>
+        </ul>
       </ul>
       <button class="scoop-logout-btn" (click)="logout(); closeSidebar()">
         <span class="material-icons">logout</span>

@@ -43,6 +43,15 @@ export class RegistroAlumnosComponent implements OnInit {
       //Asignamos a nuestra variable global el valor del ID que viene por la URL
       this.idUser = this.activatedRoute.snapshot.params['id'];
       console.log("ID User: ", this.idUser);
+      // Bloquear edición si no es el mismo usuario
+      const sessionUserId = Number(this.facadeService.getUserId());
+      const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+      const isAdmin = group === 'admin' || group === 'administrador';
+      if (!isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+        alert('No tienes permisos para editar datos de otro usuario.');
+        this.router.navigate(['alumnos']);
+        return;
+      }
       //Al iniciar la vista asignamos los datos del user
       this.alumno = this.datos_user;
     }else{
@@ -86,6 +95,14 @@ export class RegistroAlumnosComponent implements OnInit {
   public actualizar(){
     // Validación de los datos
     this.errors = {};
+    // Validar que solo pueda actualizar su propio registro
+    const sessionUserId = Number(this.facadeService.getUserId());
+    const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+    const isAdmin = group === 'admin' || group === 'administrador';
+    if (!isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+      alert('Acción no permitida: solo puedes actualizar tus propios datos.');
+      return false;
+    }
     this.errors = this.alumnosService.validarAlumno(this.alumno, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
@@ -128,6 +145,21 @@ export class RegistroAlumnosComponent implements OnInit {
   }
 }
 
+  // Función para permitir solo caracteres alfanuméricos (letras y números)
+  public soloAlfaNumericos(event: KeyboardEvent) {
+    const char = event.key;
+
+    // Permitir teclas especiales (backspace, delete, tab, flechas, etc.)
+    if (event.key.length > 1) {
+      return; // Permite teclas como Backspace, Delete, ArrowLeft, etc.
+    }
+
+    const regex = /^[A-Za-z0-9]$/;
+    if (!regex.test(char)) {
+      event.preventDefault();
+    }
+  }
+
   public calcularEdad(event: MatDatepickerInputEvent<Date>) {
     if (event.value) {
       const fechaNacimiento = new Date(event.value);
@@ -147,6 +179,14 @@ export class RegistroAlumnosComponent implements OnInit {
     public registrar(){
     //Validamos si el formulario está lleno y correcto
     this.errors = {};
+    // Para registro, si hay sesión, solo permitir si coincide el id cuando aplica
+    const sessionUserId = Number(this.facadeService.getUserId());
+    const group = (this.facadeService.getUserGroup() || '').toLowerCase();
+    const isAdmin = group === 'admin' || group === 'administrador';
+    if (this.editar && !isAdmin && (!sessionUserId || sessionUserId !== Number(this.idUser))) {
+      alert('Acción no permitida: solo puedes registrar/editar tus propios datos.');
+      return false;
+    }
     this.errors = this.alumnosService.validarAlumno(this.alumno, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;

@@ -160,4 +160,19 @@ export class RegistroAdminComponent implements OnInit {
     event.preventDefault();
   }
 }
+
+  // Función para permitir solo caracteres alfanuméricos (letras y números)
+  public soloAlfaNumericos(event: KeyboardEvent) {
+    const char = event.key;
+
+    // Permitir teclas especiales (backspace, delete, tab, flechas, etc.)
+    if (event.key.length > 1) {
+      return; // Permite teclas como Backspace, Delete, ArrowLeft, etc.
+    }
+
+    const regex = /^[A-Za-z0-9]$/;
+    if (!regex.test(char)) {
+      event.preventDefault();
+    }
+  }
 }

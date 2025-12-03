@@ -12,6 +12,7 @@ export class SidebarComponent implements OnInit {
   mobileOpen = false;
   isMobileView = window.innerWidth < 900;
   userRole: string = '';
+  academicosOpen: boolean = false;
 
   constructor(
     private router: Router,
@@ -93,5 +94,10 @@ export class SidebarComponent implements OnInit {
   canSeeRegisterItem(): boolean {
     return this.isAdmin() || this.isTeacher();
   }
+
+  toggleAcademicos() {
+  this.academicosOpen = !this.academicosOpen;
+}
+
 
 }

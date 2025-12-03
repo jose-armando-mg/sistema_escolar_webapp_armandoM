@@ -143,6 +143,12 @@ export class NavbarUserComponent implements OnInit {
   canSeeStudentItems(): boolean {
     return this.isAdmin() || this.isTeacher() || this.isStudent();
   }
+  canRegisterEventos(): boolean {
+    return this.isAdmin();
+  }
+  canSeeEventos(): boolean {
+    return this.isAdmin() || this.isTeacher() || this.isStudent();
+  }
   canSeeHomeItem(): boolean {
     return this.isAdmin() || this.isTeacher();
   }

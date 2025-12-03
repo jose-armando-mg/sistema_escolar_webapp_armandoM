@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -35,8 +35,13 @@ import { getSpanishPaginatorIntl } from './shared/spanish-paginator-intl';
 // IMPORTANTE: añade el módulo de Sidenav
 import { MatSidenavModule } from '@angular/material/sidenav';
 
+//Ngx-material-timepicker
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 //Ngx-cookie-service
 import { CookieService } from 'ngx-cookie-service';
+
+
 
 // Third Party Modules
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -47,6 +52,12 @@ import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-scre
 import { NavbarUserComponent } from './partials/navbar-user/navbar-user.component';
 import { SidebarComponent } from './partials/sidebar/sidebar.component';
 import { EliminarUserModalComponent } from './modals/eliminar-user-modal/eliminar-user-modal.component';
+import { EventosAcademicosComponent } from './screens/eventos-academicos/eventos-academicos.component';
+import { TablaEventosAcademicosComponent } from './screens/tabla-eventos-academicos/tabla-eventos-academicos.component';
+import { HttpTokenInterceptor } from './services/tools/http.interceptor';
+import { EditarComponent } from './modals/editar/editar.component';
+import { GraficasScreenComponent } from './screens/graficas-screen/graficas-screen.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -64,7 +75,11 @@ import { EliminarUserModalComponent } from './modals/eliminar-user-modal/elimina
     MaestrosScreenComponent,
     NavbarUserComponent,
     SidebarComponent,
-    EliminarUserModalComponent
+    EliminarUserModalComponent,
+    EventosAcademicosComponent,
+    TablaEventosAcademicosComponent,
+    EditarComponent,
+    GraficasScreenComponent
   ],
   imports: [
     BrowserModule,
@@ -86,12 +101,15 @@ import { EliminarUserModalComponent } from './modals/eliminar-user-modal/elimina
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatSortModule
+    MatSortModule,
+    NgxMaterialTimepickerModule,
+    NgChartsModule
   ],
   providers: [
     CookieService,
     { provide: MAT_DATE_LOCALE, useValue: 'es-MX' },
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
     provideNgxMask()
   ],
   bootstrap: [AppComponent]

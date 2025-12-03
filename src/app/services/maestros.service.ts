@@ -148,7 +148,8 @@ export class MaestrosService {
       error["rfc"] = "El RFC debe tener al menos 12 caracteres";
     } else if(rfcLimpio.length > 13){
       error["rfc"] = "El RFC no puede tener más de 13 caracteres";
-    } else if(!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{2,3}$/.test(rfcLimpio)){
+    } else if(!/^[A-ZÑ]{3,4}\d{6}[A-Z0-9]{2,3}$/.test(rfcLimpio)){
+      // No permitimos caracteres especiales como '&' en el RFC; solo letras (incluye Ñ) y números
       error["rfc"] = "El formato del RFC no es válido (Ej: ABCD123456XYZ)";
     }
   }
@@ -156,8 +157,15 @@ export class MaestrosService {
   // ========== CUBÍCULO ==========
   if(!this.validatorService.required(data["cubiculo"])){
     error["cubiculo"] = this.errorService.required;
-  } else if(data["cubiculo"].trim().length < 1){
-    error["cubiculo"] = "El cubículo no puede estar vacío";
+  } else {
+    const cubiculo = String(data["cubiculo"]).trim();
+    if(cubiculo.length < 1){
+      error["cubiculo"] = "El cubículo no puede estar vacío";
+    } else if(!/^[A-Za-z0-9]+$/.test(cubiculo)){
+      error["cubiculo"] = "El cubículo solo puede contener letras y números";
+    } else if(cubiculo.length > 20){
+      error["cubiculo"] = "El cubículo no puede exceder 20 caracteres";
+    }
   }
 
   // ========== ÁREA DE INVESTIGACIÓN ==========

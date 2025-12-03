@@ -127,7 +127,8 @@ export class AdministradoresService {
     const rfcLength = data["rfc"].length;
     if(rfcLength < 12 || rfcLength > 13){
       error["rfc"] = "El RFC debe tener 12 o 13 caracteres";
-    } else if(!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/.test(data["rfc"].toUpperCase())){
+    } else if(!/^[A-ZÑ]{3,4}\d{6}[A-Z0-9]{3}$/.test(data["rfc"].toUpperCase())){
+      // No permitimos caracteres especiales en el RFC; solo letras (incluye Ñ) y números
       error["rfc"] = "El formato del RFC no es válido";
     }
   }
@@ -223,5 +224,18 @@ public eliminarAdmin(idAdmin: number): Observable<any> {
       console.log("No se encontró el token del usuario");
     }
     return this.http.delete<any>(`${environment.url_api}/admin/?id=${idAdmin}`, { headers });
+  }
+
+  // Servicio para obtener el total de usuarios registrados por rol
+  public getTotalUsuarios(): Observable<any>{
+    const token = this.facadeService.getSessionToken();
+    let headers: HttpHeaders;
+    if (token) {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+    } else {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+      console.log("No se encontró el token del usuario");
+    }
+    return this.http.get<any>(`${environment.url_api}/total-usuarios/`, { headers });
   }
 }

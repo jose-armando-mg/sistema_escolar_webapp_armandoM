@@ -9,7 +9,7 @@
 
       <mat-form-field class="mat-input" appearance="outline">
         <mat-label>Matricula de trabajador</mat-label>
-        <input matInput [(ngModel)]="maestro.matricula" name="id" placeholder="Escribe clave de maestro">
+        <input matInput [(ngModel)]="maestro.matricula" name="id" placeholder="Escribe clave de maestro" (keypress)="soloAlfaNumericos($event)">
       </mat-form-field>
       <div *ngIf="errors.matricula" class="invalid-feedback">{{ errors.matricula }}</div>
 
@@ -63,7 +63,7 @@
       <mat-form-field class="mat-input mat-hint-margin" appearance="outline">
         <mat-label>RFC</mat-label>
         <input matInput minlength="12" maxlength="13" [(ngModel)]="maestro.rfc" placeholder="Escribe RFC"
-          style="text-transform: uppercase;">
+          style="text-transform: uppercase;" (keypress)="soloAlfaNumericos($event)">
         <mat-hint align="end">{{maestro.rfc?.length || 0}}/13</mat-hint>
       </mat-form-field>
       <div *ngIf="errors.rfc" class="invalid-feedback">{{ errors.rfc }}</div>
@@ -71,7 +71,7 @@
 
       <mat-form-field class="mat-input" appearance="outline">
         <mat-label>Cubículo</mat-label>
-        <input matInput [(ngModel)]="maestro.cubiculo" placeholder="Número de cubículo">
+        <input matInput [(ngModel)]="maestro.cubiculo" placeholder="Número de cubículo" (keypress)="soloAlfaNumericos($event)">
       </mat-form-field>
       <div *ngIf="errors.cubiculo" class="invalid-feedback">{{ errors.cubiculo }}</div>
 

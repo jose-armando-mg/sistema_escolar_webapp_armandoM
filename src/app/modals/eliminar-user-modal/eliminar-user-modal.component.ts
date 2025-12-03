@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdministradoresService } from 'src/app/services/administradores.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { MaestrosService } from 'src/app/services/maestros.service';
+import { EventosService } from 'src/app/services/eventos.service';
 
 @Component({
   selector: 'app-eliminar-user-modal',
@@ -17,6 +18,7 @@ export class EliminarUserModalComponent implements OnInit {
     private administradoresService: AdministradoresService,
     private maestrosService: MaestrosService,
     private alumnosService: AlumnosService,
+    private eventosService: EventosService,
     private dialogRef: MatDialogRef<EliminarUserModalComponent>,
     @Inject (MAT_DIALOG_DATA) public data: any
   ) { }
@@ -62,6 +64,9 @@ export class EliminarUserModalComponent implements OnInit {
           this.dialogRef.close({isDelete:false});
         }
       );
+    }else if(this.rol == "evento académico"){
+      // Solo cierra el modal, la eliminación se hace en el componente que lo llamó
+      this.dialogRef.close({isDelete:true});
     }
 
   }

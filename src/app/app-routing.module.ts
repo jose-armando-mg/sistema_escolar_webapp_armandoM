@@ -8,6 +8,9 @@ import { HomeScreenComponent } from './screens/home-screen/home-screen.component
 import { AdminScreenComponent } from './screens/admin-screen/admin-screen.component';
 import { AlumnosScreenComponent } from './screens/alumnos-screen/alumnos-screen.component';
 import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-screen.component';
+import { EventosAcademicosComponent } from './screens/eventos-academicos/eventos-academicos.component';
+import { TablaEventosAcademicosComponent } from './screens/tabla-eventos-academicos/tabla-eventos-academicos.component';
+import { GraficasScreenComponent } from './screens/graficas-screen/graficas-screen.component';
 
 const routes: Routes = [
   {
@@ -27,7 +30,12 @@ const routes: Routes = [
       { path: 'home', component: HomeScreenComponent },
       { path: 'administrador', component: AdminScreenComponent }, // Keep legacy route
       { path: 'alumnos', component: AlumnosScreenComponent },
-      { path: 'maestros', component: MaestrosScreenComponent }
+      { path: 'maestros', component: MaestrosScreenComponent },
+      { path: 'eventos-academicos', component: TablaEventosAcademicosComponent },
+      { path: 'eventos-academicos/registrar', component: EventosAcademicosComponent },
+      { path: 'eventos-academicos/editar/:id', component: EventosAcademicosComponent },
+      { path: 'tabla-eventos-academicos', component: TablaEventosAcademicosComponent },
+      { path: 'graficas', component: GraficasScreenComponent }
 
     ]
   },

@@ -128,7 +128,8 @@ export class AlumnosService {
     const rfcLength = data["rfc"].length;
     if(rfcLength < 12 || rfcLength > 13){
       error["rfc"] = "El RFC debe tener 12 o 13 caracteres";
-    } else if(!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/.test(data["rfc"].toUpperCase())){
+    } else if(!/^[A-ZÑ]{3,4}\d{6}[A-Z0-9]{3}$/.test(data["rfc"].toUpperCase())){
+      // No permitimos caracteres especiales en el RFC; solo letras (incluye Ñ) y números
       error["rfc"] = "El formato del RFC no es válido";
     }
   }
