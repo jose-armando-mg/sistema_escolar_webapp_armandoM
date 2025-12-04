@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class EventosService {
-  private apiUrl = 'https://abibad.pythonanywhere.com'; // Use URL from environment (dev/prod)
+  private apiUrl = environment.url_api;// Use URL from environment (dev/prod)
 
   constructor(
     private http: HttpClient,

@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AlumnosService {
-   private apiUrl = 'https://abibad.pythonanywhere.com';
+   private apiUrl = environment.url_api;
 
   constructor(
     private http: HttpClient,
