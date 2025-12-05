@@ -21,10 +21,10 @@ export class GraficasScreenComponent implements OnInit {
         data:[0, 0, 0, 0],
         label: 'Eventos Académicos',
         backgroundColor: [
-          '#F88406',
-          '#FCFF44',
-          '#82D3FB',
-          '#FB82F5'
+          '#6366F1',
+          '#0EA5E9',
+          '#10B981',
+          '#F59E0B'
         ]
       }
     ]
@@ -40,10 +40,10 @@ export class GraficasScreenComponent implements OnInit {
         data:[0, 0, 0, 0],
         label: 'Eventos Académicos',
         backgroundColor: [
-          '#F88406',
-          '#FCFF44',
-          '#82D3FB',
-          '#FB82F5'
+          '#6366F1',
+          '#0EA5E9',
+          '#10B981',
+          '#F59E0B'
         ]
       }
     ]
@@ -58,9 +58,9 @@ export class GraficasScreenComponent implements OnInit {
       {
         data:[0, 0, 0],
         backgroundColor: [
-          '#FCFF44',
-          '#F1C8F2',
-          '#31E731'
+          '#8B5CF6',
+          '#EC4899',
+          '#06B6D4'
         ]
       }
     ]
@@ -74,7 +74,7 @@ export class GraficasScreenComponent implements OnInit {
     datasets: [
       {
         data:[0, 0, 0],
-        backgroundColor: ['#F88406','#FCFF44','#31E7E7']
+        backgroundColor: ['#EF4444','#3B82F6','#8B5CF6']
       }
     ]
   };
